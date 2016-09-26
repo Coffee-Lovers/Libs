@@ -1,0 +1,28 @@
+{
+    "name": "Cofee-Lovers/Queeu",
+    "description": "Queue library",
+    "type": "library",
+    "autoload": {
+        "psr-4": {"CL\\": "src/"}
+    },
+    "require": {
+        "php": "^7",
+        "monolog/monolog": "^1.20",
+        "psr/log": "^1.0",
+        "php-amqplib/php-amqplib": "^2.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.4"
+    },
+    "authors": [
+        {
+            "name": "Petr Pokorný",
+            "email": "petr@petrpokorny.cz"
+        },
+        {
+            "name": "Nikola Trbojevic",
+            "email": "bureque@yahoo.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
