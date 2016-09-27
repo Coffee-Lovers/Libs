@@ -9,8 +9,16 @@ interface Queue
     /**
      * Push task to the queue
      * @param  Task $task The task to push to queue.
+     * @param string $queueName
      *
-     * @return boolean (if the push was successfull or not)
+     * @return bool
      */
-    public function push(\CLLibs\Queue\Task $task): bool;
+    public function push(\CLLibs\Queue\Task $task, string $queueName): bool;
+
+    /**
+     * @param string $queueName
+     * @param callable $callback
+     * @return void
+     */
+    public function consume(string $queueName, Callable $callback);
 }

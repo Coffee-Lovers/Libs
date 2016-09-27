@@ -46,13 +46,14 @@ class RabbitMQ implements Queue
     /**
      * Push task to the queue
      * @param \CLLibs\Queue\Task $task The task to push to queue.
+     * @param string $queueName Which queue to use
      *
      * @return bool
      */
-    public function push(\CLLibs\Queue\Task $task): bool
+    public function push(\CLLibs\Queue\Task $task, string $queueName): bool
     {
-        $this->logger->notice("Pushing the task to the queeu", ['task' => $task]);
-        $this->connect();
+        $this->logger->notice("Pushing the task to the queue", ['task' => $task]);
+        $this->connect($queueName);
         $msg = new AMQPMessage(serialize($task), array('delivery_mode' => 2));
 
         $this->channel->basic_publish($msg, '', 'task_queue');
@@ -62,13 +63,14 @@ class RabbitMQ implements Queue
 
     /**
      * Make connection to the rabbitMQ
-     * @return boolean if connection succeeded
+     * @param string $queueName Which queue name to use.
+     * @return bool if connection succeeded
      */
-    protected function connect()
+    protected function connect(string $queueName)
     {
         $this->connection = new AMQPStreamConnection($this->host, $this->port, $this->username, $this->password);
         $this->channel = $this->connection->channel();
-        $this->channel->queue_declare('task_queue', false, true, false, false);
+        $this->channel->queue_declare($queueName, false, true, false, false);
     }
 
     /**
@@ -79,5 +81,15 @@ class RabbitMQ implements Queue
     {
         $this->channel->close();
         $this->connection->close();
+    }
+
+    /**
+     * @param string $queueName
+     * @param callable $callback
+     * @return void
+     */
+    public function consume(string $queueName, Callable $callback)
+    {
+        // TODO: Implement consume() method.
     }
 }
