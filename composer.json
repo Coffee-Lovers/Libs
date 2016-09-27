@@ -1,5 +1,5 @@
 {
-    "name": "coffee-lovers/queue",
+    "name": "coffee-lovers/libs",
     "description": "Queue library",
     "type": "library",
     "autoload": {

@@ -9,7 +9,7 @@ use \PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 
 /**
- * RabbitMQ implementation of task queu.
+ * RabbitMQ implementation of task queue.
  */
 class RabbitMQ implements Queue
 {
@@ -90,6 +90,20 @@ class RabbitMQ implements Queue
      */
     public function consume(string $queueName, Callable $callback)
     {
-        // TODO: Implement consume() method.
+        $this->connect($queueName);
+        $this->channel->basic_qos(null, 1, null);
+
+        $logger = $this->logger;
+        $wrapper = function($message) use ($callback, $queueName, $logger) {
+            $logger->debug("Consuming message.", ["message" => $message, "queue" => $queueName]);
+            $callback($message->body);
+            $message->delivery_info['channel']->basic_ack($message->delivery_info['delivery_tag']);
+        };
+
+        $this->channel->basic_consume('task_queue', '', false, false, false, false, $wrapper);
+
+        while(count($this->channel->callbacks)) {
+            $this->channel->wait();
+        }
     }
 }
