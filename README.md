@@ -1,4 +1,5 @@
-# Queue
-The domain queue library
+# Libs
 
-This library contains shared objects and implementations for queueing tasks
+This library contains shared libraries
+
+- Queue library

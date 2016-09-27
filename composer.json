@@ -3,7 +3,7 @@
     "description": "Queue library",
     "type": "library",
     "autoload": {
-        "psr-4": {"CL\\": "src/"}
+        "psr-4": {"CLLibs\\": "src/"}
     },
     "require": {
         "php": "^7",

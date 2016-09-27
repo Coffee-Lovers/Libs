@@ -1,5 +1,5 @@
 <?php
-namespace CL\Queue;
+namespace CLLibs\Queue;
 
 /**
  * Simple queue interface.
@@ -12,5 +12,5 @@ interface QueueInterface
      *
      * @return boolean (if the push was successfull or not)
      */
-    public function push(\CL\Queue\Task $task): bool;
+    public function push(\CLLibs\Queue\Task $task): bool;
 }

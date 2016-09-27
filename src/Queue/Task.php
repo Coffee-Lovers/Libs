@@ -1,5 +1,5 @@
 <?php
-namespace CL\Queue;
+namespace CLLibs\Queue;
 
 /**
  * The queue task

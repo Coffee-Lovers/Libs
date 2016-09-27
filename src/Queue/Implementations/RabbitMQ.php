@@ -1,7 +1,7 @@
 <?php
-namespace CL\Queue\Implementations;
+namespace CLLibs\Queue\Implementations;
 
-use \CL\Queue\QueueInterface;
+use \CLLibs\Queue\QueueInterface;
 use PhpAmqpLib\Channel\AMQPChannel;
 use \PhpAmqpLib\Connection\AMQPStreamConnection;
 use \PhpAmqpLib\Message\AMQPMessage;
@@ -45,11 +45,11 @@ class RabbitMQ implements QueueInterface
 
     /**
      * Push task to the queue
-     * @param \CL\Queue\Task $task The task to push to queue.
+     * @param \CLLibs\Queue\Task $task The task to push to queue.
      *
      * @return bool
      */
-    public function push(\CL\Queue\Task $task): bool
+    public function push(\CLLibs\Queue\Task $task): bool
     {
         $this->connect();
         $msg = new AMQPMessage(serialize($task), array('delivery_mode' => 2));
