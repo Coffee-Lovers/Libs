@@ -1,10 +1,12 @@
 <?php
 namespace CLLibs\Queue\Queue;
 
+use CLLibs\ConnectionConfig;
 use \CLLibs\Queue\Queue;
 use PhpAmqpLib\Channel\AMQPChannel;
 use \PhpAmqpLib\Connection\AMQPStreamConnection;
 use \PhpAmqpLib\Message\AMQPMessage;
+use Psr\Log\LoggerInterface;
 
 /**
  * RabbitMQ implementation of task queu.
@@ -23,24 +25,22 @@ class RabbitMQ implements Queue
     protected $channel;
     /** @var  AMQPStreamConnection */
     protected $connection;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
-     * The constructor.
-     * @param string $host     [description]
-     * @param string $port     [description]
-     * @param string $username [description]
-     * @param string $password [description]
+     * RabbitMQ constructor.
+     * @param ConnectionConfig $config The config of the connection to make.
+     * @param LoggerInterface $logger The logger.
      */
-    public function __construct(
-        string $host,
-        string $port,
-        string $username,
-        string $password
-    ) {
-        $this->host     = $host;
-        $this->port     = $port;
-        $this->username = $username;
-        $this->password = $password;
+    public function __construct(ConnectionConfig $config, LoggerInterface $logger) {
+        $this->host     = $config->getHost();
+        $this->port     = $config->getPort();
+        $this->username = $config->getUser();
+        $this->password = $config->getPassword();
+        $this->logger   = $logger;
     }
 
     /**
@@ -51,6 +51,7 @@ class RabbitMQ implements Queue
      */
     public function push(\CLLibs\Queue\Task $task): bool
     {
+        $this->logger->notice("Pushing the task to the queeu", ['task' => $task]);
         $this->connect();
         $msg = new AMQPMessage(serialize($task), array('delivery_mode' => 2));
 
