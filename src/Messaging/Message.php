@@ -15,12 +15,24 @@ namespace CLLibs\Messaging;
  */
 class Message implements \Serializable
 {
-    /** @var string  */
-    protected $jobId;
 
-    public function __construct(string $jobId)
+    /** @var string  */
+    protected $topic;
+    /**
+     * @var array
+     */
+    private $payload;
+
+    /**
+     * Message constructor.
+     *
+     * @param string $topic   Message topic.
+     * @param array  $payload Message payload.
+     */
+    public function __construct(string $topic, array $payload)
     {
-        $this->jobId = $jobId;
+        $this->topic   = $topic;
+        $this->payload = $payload;
     }
 
     /**
@@ -31,7 +43,10 @@ class Message implements \Serializable
      */
     public function serialize() : string
     {
-        return serialize(['jobId' => $this->jobId]);
+        return serialize([
+            'topic'   => $this->topic,
+            'payload' => $this->payload
+        ]);
     }
 
     /**
@@ -45,6 +60,6 @@ class Message implements \Serializable
      */
     public function unserialize($serialized)
     {
-        list($this->jobId) = unserialize($serialized);
+        list($this->topic, $this->payload) = unserialize($serialized);
     }
 }
