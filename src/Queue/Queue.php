@@ -4,7 +4,7 @@ namespace CLLibs\Queue;
 /**
  * Simple queue interface.
  */
-interface QueueInterface
+interface Queue
 {
     /**
      * Push task to the queue

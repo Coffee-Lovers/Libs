@@ -1,7 +1,7 @@
 <?php
-namespace CLLibs\Queue\Implementations;
+namespace CLLibs\Queue\Queue;
 
-use \CLLibs\Queue\QueueInterface;
+use \CLLibs\Queue\Queue;
 use PhpAmqpLib\Channel\AMQPChannel;
 use \PhpAmqpLib\Connection\AMQPStreamConnection;
 use \PhpAmqpLib\Message\AMQPMessage;
@@ -9,7 +9,7 @@ use \PhpAmqpLib\Message\AMQPMessage;
 /**
  * RabbitMQ implementation of task queu.
  */
-class RabbitMQ implements QueueInterface
+class RabbitMQ implements Queue
 {
     /** @var string  */
     protected $host;
