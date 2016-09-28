@@ -14,6 +14,7 @@ use CLLibs\Messaging\Hub;
 use CLLibs\Messaging\Message;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -50,11 +51,17 @@ class RabbitMQ implements Hub
 
     /**
      * @param Message $message Publish the message to everybody
-     * @return void
+     * @return bool
      */
-    public function publish(Message $message)
+    public function publish(Message $message) : bool
     {
         $this->logger->notice("Publishing message.", ["message" => serialize($message)]);
+        $this->connect();
+        $msg = new AMQPMessage(serialize($message));
+
+        $this->channel->basic_publish($msg, 'coffeepot_progress', $message->getTopic());
+        $this->tearDown();
+        return true;
     }
 
     /**
@@ -68,7 +75,7 @@ class RabbitMQ implements Hub
             $this->config->getHost(), $this->config->getPort(), $this->config->getUser(), $this->config->getPassword()
         );
         $this->channel = $this->connection->channel();
-        $this->channel->queue_declare('task_queue', false, true, false, false);
+        $this->channel->exchange_declare('coffeepot_progress', 'topic', false, false, false);
     }
 
     /**

@@ -15,7 +15,7 @@ namespace CLLibs\Messaging;
 class CoffeePotProgressMessage extends Message
 {
     const TOPIC = 'coffeepot.progress';
-    
+
     const STAGE_PENDING          = 1;
     const STAGE_BOILING_WATTER   = 2;
     const STAGE_BREWING_COFFEE   = 3;

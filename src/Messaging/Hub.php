@@ -13,7 +13,7 @@ interface Hub
 {
     /**
      * @param Message $message Publish the message to everybody
-     * @return void
+     * @return bool
      */
-    public function publish(Message $message);
+    public function publish(Message $message) : bool;
 }
