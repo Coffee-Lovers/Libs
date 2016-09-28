@@ -21,7 +21,7 @@ class Message implements \Serializable
     /**
      * @var array
      */
-    private $payload;
+    protected $payload;
 
     /**
      * Message constructor.
@@ -33,6 +33,22 @@ class Message implements \Serializable
     {
         $this->topic   = $topic;
         $this->payload = $payload;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTopic(): string
+    {
+        return $this->topic;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPayload(): array
+    {
+        return $this->payload;
     }
 
     /**
