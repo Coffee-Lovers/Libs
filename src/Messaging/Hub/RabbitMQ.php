@@ -75,7 +75,7 @@ class RabbitMQ implements Hub
             $this->config->getHost(), $this->config->getPort(), $this->config->getUser(), $this->config->getPassword()
         );
         $this->channel = $this->connection->channel();
-        $this->channel->exchange_declare('coffeepot_progress', 'topic', false, false, false);
+        $this->channel->exchange_declare('coffeepot_progress', 'topic', false, true, false);
     }
 
     /**
@@ -87,5 +87,23 @@ class RabbitMQ implements Hub
     {
         $this->channel->close();
         $this->connection->close();
+    }
+
+    /**
+     * @param string $topic
+     * @param callable $callback
+     * @return void
+     */
+    public function subscribe(string $topic, callable $callback)
+    {
+        $this->connect();
+        list($queue_name, ,) = $this->channel->queue_declare("", false, false, true, false);
+        $this->channel->queue_bind($queue_name, 'coffeepot_progress', $topic);
+        $this->channel->basic_consume($queue_name, '', false, true, false, false, $callback);
+        while(count($this->channel->callbacks)) {
+            $this->channel->wait();
+        }
+
+        $this->tearDown();
     }
 }

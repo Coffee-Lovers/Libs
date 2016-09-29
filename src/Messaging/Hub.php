@@ -16,4 +16,11 @@ interface Hub
      * @return bool
      */
     public function publish(Message $message) : bool;
+
+    /**
+     * @param string $topic
+     * @param callable $callback
+     * @return void
+     */
+    public function subscribe(string $topic, callable $callback);
 }

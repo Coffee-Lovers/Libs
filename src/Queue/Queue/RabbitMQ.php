@@ -105,5 +105,7 @@ class RabbitMQ implements Queue
         while(count($this->channel->callbacks)) {
             $this->channel->wait();
         }
+
+        $this->tearDown();
     }
 }
