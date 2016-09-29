@@ -76,6 +76,8 @@ class Message implements \Serializable
      */
     public function unserialize($serialized)
     {
-        list($this->topic, $this->payload) = unserialize($serialized);
+        $unSerialized  = unserialize($serialized);
+        $this->topic   = $unSerialized['topic'];
+        $this->payload = $unSerialized['payload'];
     }
 }

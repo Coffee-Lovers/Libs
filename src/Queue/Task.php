@@ -48,6 +48,6 @@ class Task implements \Serializable
      */
     public function unserialize($serialized)
     {
-        list($this->id) = unserialize($serialized);
+        $this->id = unserialize($serialized)['id'];
     }
 }
