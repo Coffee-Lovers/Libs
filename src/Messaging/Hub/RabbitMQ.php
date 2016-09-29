@@ -97,9 +97,16 @@ class RabbitMQ implements Hub
     public function subscribe(string $topic, callable $callback)
     {
         $this->connect();
-        list($queue_name, ,) = $this->channel->queue_declare("", false, false, true, false);
-        $this->channel->queue_bind($queue_name, 'coffeepot_progress', $topic);
-        $this->channel->basic_consume($queue_name, '', false, true, false, false, $callback);
+        list($queueName, ,) = $this->channel->queue_declare("", false, false, true, false);
+        $this->channel->queue_bind($queueName, 'coffeepot_progress', $topic);
+        $logger = $this->logger;
+
+        $wrapper = function($message) use ($callback, $queueName, $logger) {
+            $logger->debug("Consuming message.", ["message" => $message, "queue" => $queueName]);
+            $callback($message->body);
+        };
+
+        $this->channel->basic_consume($queueName, '', false, true, false, false, $wrapper);
         while(count($this->channel->callbacks)) {
             $this->channel->wait();
         }
