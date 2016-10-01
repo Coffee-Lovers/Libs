@@ -31,20 +31,26 @@ class ConnectionConfig
      * @var string
      */
     private $password;
+    /**
+     * @var string
+     */
+    private $exchange;
 
     /**
      * ConnectionConfig constructor.
-     * @param string $host The host to connect to.
-     * @param string $port The port to use.
-     * @param string $user The username
+     * @param string $host     The host to connect to.
+     * @param string $port     The port to use.
+     * @param string $user     The username
      * @param string $password The password (can be empty)
+     * @param string $exchange Messaging exchange name.
      */
-    public function __construct(string $host, string $port, string $user, string $password = null)
+    public function __construct(string $host, string $port, string $user, string $password = null, string $exchange = null)
     {
-        $this->user = $user;
-        $this->host = $host;
-        $this->port = $port;
+        $this->user     = $user;
+        $this->host     = $host;
+        $this->port     = $port;
         $this->password = $password;
+        $this->exchange = $exchange;
     }
 
     /**
@@ -79,5 +85,12 @@ class ConnectionConfig
         return $this->password;
     }
 
+    /**
+     * @return string
+     */
+    public function getExchange(): string
+    {
+        return $this->exchange;
+    }
 
 }
