@@ -62,28 +62,6 @@ class RabbitMQ implements Queue
     }
 
     /**
-     * Make connection to the rabbitMQ
-     * @param string $queueName Which queue name to use.
-     * @return bool if connection succeeded
-     */
-    protected function connect(string $queueName)
-    {
-        $this->connection = new AMQPStreamConnection($this->host, $this->port, $this->username, $this->password);
-        $this->channel = $this->connection->channel();
-        $this->channel->queue_declare($queueName, false, true, false, false);
-    }
-
-    /**
-     * Close open connectoins.
-     * @return void
-     */
-    protected function tearDown()
-    {
-        $this->channel->close();
-        $this->connection->close();
-    }
-
-    /**
      * @param string $queueName
      * @param callable $callback
      * @return void
@@ -107,5 +85,27 @@ class RabbitMQ implements Queue
         }
 
         $this->tearDown();
+    }
+
+    /**
+     * Make connection to the rabbitMQ
+     * @param string $queueName Which queue name to use.
+     * @return bool if connection succeeded
+     */
+    protected function connect(string $queueName)
+    {
+        $this->connection = new AMQPStreamConnection($this->host, $this->port, $this->username, $this->password);
+        $this->channel = $this->connection->channel();
+        $this->channel->queue_declare($queueName, false, true, false, false);
+    }
+
+    /**
+     * Close open connectoins.
+     * @return void
+     */
+    protected function tearDown()
+    {
+        $this->channel->close();
+        $this->connection->close();
     }
 }

@@ -59,34 +59,9 @@ class RabbitMQ implements Hub
         $this->connect();
         $msg = new AMQPMessage(serialize($message));
 
-        $this->channel->basic_publish($msg, 'coffeepot_progress', $message->getTopic());
+        $this->channel->basic_publish($msg, $this->config->getExchange(), $message->getTopic());
         $this->tearDown();
         return true;
-    }
-
-    /**
-     * @todo move to some common place for queue and messaging hub
-     * Make connection to the rabbitMQ
-     * @return boolean if connection succeeded
-     */
-    protected function connect()
-    {
-        $this->connection = new AMQPStreamConnection(
-            $this->config->getHost(), $this->config->getPort(), $this->config->getUser(), $this->config->getPassword()
-        );
-        $this->channel = $this->connection->channel();
-        $this->channel->exchange_declare('coffeepot_progress', 'topic', false, true, false);
-    }
-
-    /**
-     * @todo move to some common place for queue and messaging hub
-     * Close open connectoins.
-     * @return void
-     */
-    protected function tearDown()
-    {
-        $this->channel->close();
-        $this->connection->close();
     }
 
     /**
@@ -98,7 +73,7 @@ class RabbitMQ implements Hub
     {
         $this->connect();
         list($queueName, ,) = $this->channel->queue_declare("", false, false, true, false);
-        $this->channel->queue_bind($queueName, 'coffeepot_progress', $topic);
+        $this->channel->queue_bind($queueName, $this->config->getExchange(), $topic);
         $logger = $this->logger;
 
         $wrapper = function($message) use ($callback, $queueName, $logger) {
@@ -112,5 +87,30 @@ class RabbitMQ implements Hub
         }
 
         $this->tearDown();
+    }
+
+    /**
+     * @todo move to some common place for queue and messaging hub
+     * Make connection to the rabbitMQ
+     * @return boolean if connection succeeded
+     */
+    protected function connect()
+    {
+        $this->connection = new AMQPStreamConnection(
+            $this->config->getHost(), $this->config->getPort(), $this->config->getUser(), $this->config->getPassword()
+        );
+        $this->channel = $this->connection->channel();
+        $this->channel->exchange_declare($this->config->getExchange(), 'topic', false, true, false);
+    }
+
+    /**
+     * @todo move to some common place for queue and messaging hub
+     * Close open connectoins.
+     * @return void
+     */
+    protected function tearDown()
+    {
+        $this->channel->close();
+        $this->connection->close();
     }
 }
