@@ -44,7 +44,7 @@ class ConnectionConfig
      * @param string $password The password (can be empty)
      * @param string $exchange Messaging exchange name.
      */
-    public function __construct(string $host, string $port, string $user, string $password = null, string $exchange = null)
+    public function __construct(string $host, string $port, string $user, string $password = '', string $exchange = '')
     {
         $this->user     = $user;
         $this->host     = $host;
