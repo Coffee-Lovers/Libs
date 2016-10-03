@@ -22,17 +22,23 @@ class Message implements \Serializable
      * @var array
      */
     protected $payload;
+    /**
+     * @var string
+     */
+    private $version;
 
     /**
      * Message constructor.
      *
-     * @param string $topic   Message topic.
+     * @param string $version The message version.
+     * @param string $topic Message topic.
      * @param array  $payload Message payload.
      */
-    public function __construct(string $topic, array $payload)
+    public function __construct(string $version, string $topic, array $payload)
     {
         $this->topic   = $topic;
         $this->payload = $payload;
+        $this->version = $version;
     }
 
     /**
@@ -41,6 +47,14 @@ class Message implements \Serializable
     public function getTopic(): string
     {
         return $this->topic;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVersion(): string
+    {
+        return $this->version;
     }
 
     /**

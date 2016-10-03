@@ -14,7 +14,8 @@ namespace CLLibs\Messaging;
  */
 class CoffeePotProgressMessage extends Message
 {
-    const TOPIC = 'coffeepot.progress';
+    const TOPIC       = 'coffeepot.progress';
+    const __VERSION__ = 'v1';
 
     const STAGE_PENDING          = 1;
     const STAGE_BOILING_WATTER   = 2;
@@ -30,6 +31,7 @@ class CoffeePotProgressMessage extends Message
     public function __construct(string $relatedTaskID, string $stage)
     {
         parent::__construct(
+            self::__VERSION__,
             self::TOPIC,
             [
                 'taskID' => $relatedTaskID,
