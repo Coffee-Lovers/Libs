@@ -13,7 +13,7 @@ namespace CLLibs\Messaging;
  * Class Message that carries simple progress update.
  * @package CLLibs\Messaging
  */
-class Message implements \Serializable
+class Message implements \CLLibs\Serializable
 {
 
     /** @var string  */
@@ -67,9 +67,8 @@ class Message implements \Serializable
 
     /**
      * String representation of object
-     * @link http://php.net/manual/en/serializable.serialize.php
-     * @return string the string representation of the object or null
-     * @since 5.1.0
+     *
+     * @return string
      */
     public function serialize() : string
     {
@@ -86,14 +85,14 @@ class Message implements \Serializable
      * @param string $serialized <p>
      * The string representation of the object.
      * </p>
-     * @return void
+     * @return self
      * @since 5.1.0
      */
-    public function unserialize($serialized)
+    public static function unserialize(string $serialized)
     {
-        $unSerialized  = json_decode($serialized);
-        $this->topic   = $unSerialized['topic'];
-        $this->version = $unSerialized['_version'];
-        $this->payload = $unSerialized['payload'];
+        $unSerialized  = json_decode($serialized, true);
+        return new self(
+            $unSerialized['_version'], $unSerialized['topic'], $unSerialized['payload']
+        );
     }
 }

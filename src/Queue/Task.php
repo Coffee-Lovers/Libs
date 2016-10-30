@@ -4,7 +4,7 @@ namespace CLLibs\Queue;
 /**
  * The queue task
  */
-class Task implements \Serializable
+class Task implements \CLLibs\Serializable
 {
     protected $id;
 
@@ -34,20 +34,18 @@ class Task implements \Serializable
      */
     public function serialize() : string
     {
-        return serialize(['id' => $this->id]);
+        return json_encode(['id' => $this->id]);
     }
 
     /**
      * Constructs the object
-     * @link http://php.net/manual/en/serializable.unserialize.php
-     * @param string $serialized <p>
-     * The string representation of the object.
-     * </p>
-     * @return void
-     * @since 5.1.0
+     *
+     * @param string $serialized The serialized
+     *
+     * @return Task
      */
-    public function unserialize($serialized)
+    public static function unserialize(string $serialized)
     {
-        $this->id = unserialize($serialized)['id'];
+        return new self(json_decode($serialized, true)['id']);
     }
 }

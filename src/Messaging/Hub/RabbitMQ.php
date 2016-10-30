@@ -55,9 +55,9 @@ class RabbitMQ implements Hub
      */
     public function publish(Message $message) : bool
     {
-        $this->logger->notice("Publishing message.", ["message" => serialize($message)]);
+        $this->logger->notice("Publishing message.", ["message" => $message->serialize()]);
         $this->connect();
-        $msg = new AMQPMessage(serialize($message));
+        $msg = new AMQPMessage($message->serialize());
 
         $this->channel->basic_publish($msg, $this->config->getExchange(), $message->getTopic());
         $this->tearDown();
