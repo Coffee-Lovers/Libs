@@ -73,9 +73,10 @@ class Message implements \Serializable
      */
     public function serialize() : string
     {
-        return serialize([
-            'topic'   => $this->topic,
-            'payload' => $this->payload
+        return json_encode([
+            'topic'    => $this->topic,
+            '_version' => $this->version,
+            'payload'  => $this->payload
         ]);
     }
 
@@ -90,8 +91,9 @@ class Message implements \Serializable
      */
     public function unserialize($serialized)
     {
-        $unSerialized  = unserialize($serialized);
+        $unSerialized  = json_decode($serialized);
         $this->topic   = $unSerialized['topic'];
+        $this->version = $unSerialized['_version'];
         $this->payload = $unSerialized['payload'];
     }
 }
