@@ -54,7 +54,7 @@ class RabbitMQ implements Queue
     {
         $this->logger->notice("Pushing the task to the queue", ['task' => $task]);
         $this->connect($queueName);
-        $msg = new AMQPMessage(serialize($task), array('delivery_mode' => 2));
+        $msg = new AMQPMessage($task->serialize(), array('delivery_mode' => 2));
 
         $this->channel->basic_publish($msg, '', 'task_queue');
         $this->tearDown();
