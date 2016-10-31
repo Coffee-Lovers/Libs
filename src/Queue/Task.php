@@ -46,6 +46,7 @@ class Task implements \CLLibs\Serializable
      */
     public static function unserialize(string $serialized)
     {
-        return new self(json_decode($serialized, true)['id']);
+        $task = new self();
+        $task->id = json_decode($serialized, true)['id'];
     }
 }
