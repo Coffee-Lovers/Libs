@@ -48,5 +48,7 @@ class Task implements \CLLibs\Serializable
     {
         $task = new self();
         $task->id = json_decode($serialized, true)['id'];
+
+        return $task;
     }
 }
