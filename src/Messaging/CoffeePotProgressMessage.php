@@ -28,15 +28,17 @@ class CoffeePotProgressMessage extends Message
      * CoffeePotProgressMessage constructor.
      * @param string $relatedTaskID
      * @param string $stage
+     * @param int    $timestamp Unix timestamp.
      */
-    public function __construct(string $relatedTaskID, string $stage)
+    public function __construct(string $relatedTaskID, string $stage, int $timestamp)
     {
         parent::__construct(
             self::__VERSION__,
             self::TOPIC,
             [
-                'taskID' => $relatedTaskID,
-                'stage'  => $stage,
+                'taskID'     => $relatedTaskID,
+                'stage'      => $stage,
+                'timestamp'  => $timestamp,
             ]
         );
     }
@@ -55,5 +57,13 @@ class CoffeePotProgressMessage extends Message
     public function getRelatedTaskId() : string
     {
         return parent::getPayload()['taskID'];
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimestamp() : int
+    {
+        return parent::getPayload()['timestamp'];
     }
 }
